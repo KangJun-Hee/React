@@ -8,30 +8,26 @@ function Cuisine() {
   let params = useParams();
 
   const getCuisine = async (name) => {
-    const data = await fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`
-    );
-    const recipes = await data.json();
-    setCuisine(recipes.results);
+    // 로컬 스토리지에서 해당 요리 타입에 대한 데이터를 먼저 확인
+    const check = localStorage.getItem(`cuisine_${name}`);
+
+    if (check) {
+      // 저장된 데이터가 있으면 그 데이터를 사용
+      setCuisine(JSON.parse(check));
+    } else {
+      // 저장된 데이터가 없으면 API를 호출하여 데이터 가져오기
+      const data = await fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`
+      );
+      const recipes = await data.json();
+
+      // API로 받은 데이터를 로컬 스토리지에 저장
+      localStorage.setItem(`cuisine_${name}`, JSON.stringify(recipes.results));
+
+      // 화면에 데이터 표시
+      setCuisine(recipes.results);
+    }
   };
-
-  // const getCuisine = async (name) => {
-  //   const check = localStorage.getItem("cuisine");
-
-  //   if (check) {
-  //     setCuisine(JSON.parse(check));
-  //   } else {
-  //     const data = await fetch(
-  //       `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`
-  //     );
-  //     const recipes = await data.json();
-
-  //     localStorage.setItem("cuisine", JSON.stringify(recipes.results)); // 객체를 문자열로 변환하여 저장
-
-  //     setCuisine(recipes.results);
-  //     console.log(recipes.results);
-  //   }
-  // };
 
   useEffect(() => {
     getCuisine(params.type);
@@ -39,12 +35,19 @@ function Cuisine() {
   }, [params.type]);
 
   return (
-    <Grid>
+    <Grid
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       {cuisine.map((item) => {
         return (
           <Card key={item.id}>
-            <img src={item.image} alt="" />
-            <h4>{item.title}</h4>
+            <Link to={"/recipe/" + item.id}>
+              <img src={item.image} alt="" />
+              <h4>{item.title}</h4>
+            </Link>
           </Card>
         );
       })}
@@ -52,7 +55,7 @@ function Cuisine() {
   );
 }
 
-const Grid = styled.div`
+const Grid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   grid-gap: 3rem;

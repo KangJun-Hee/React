@@ -18,23 +18,6 @@ function Recipe() {
     console.log(detailData);
   };
 
-//   const check = localStorage.getItem("details");
-//   if(check){
-//     setDetails(JSON.parse(check));
-//   }else{
-//     const data = await fetch(
-//         `https://api.spoonacular.com/recipes/${params.name}/information?apiKey=${process.env.REACT_APP_API_KEY}`
-//       );
-//       const detailData = await data.json();
-
-//       localStorage.setItem("details", JSON.stringify(detailData.results)); // 객체를 문자열로 변환하여 저장
-
-//       setDetails(detailData.results);
-//       console.log(detailData.results);
-//   }
-  
-//   };
-
   useEffect(() => {
     fetchDetails();
   }, [params.name]);
@@ -58,17 +41,22 @@ function Recipe() {
         >
           Ingredients
         </Button>
-        <div>
-          <h3 dangerouslySetInnerHTML={{ __html: details.summary }}>
-            {details.summary}
-          </h3>
-          <h3 dangerouslySetInnerHTML={{ __html: details.instructions }}></h3>
-        </div>
-        <ul>
-          {details.extendedIngredients.map((ingredient) => (
-            <li key={ingredient.id}>{ingredient.original}</li>
-          ))}
-        </ul>
+        {activeTab === "instructions" && (
+          <div>
+            <h3 dangerouslySetInnerHTML={{ __html: details.summary }}>
+              {/* {details.summary} */}
+            </h3>
+            <h3 dangerouslySetInnerHTML={{ __html: details.instructions }}></h3>
+          </div>
+        )}
+        {activeTab === "ingredients" && (
+          <ul>
+            {details.extendedIngredients &&
+              details.extendedIngredients.map((ingredient) => (
+                <li key={ingredient.id}>{ingredient.original}</li>
+              ))}
+          </ul>
+        )}
       </Info>
     </DetailWrapper>
   );
