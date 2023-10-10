@@ -2,9 +2,10 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { GraphQLClient, gql } from "graphql-request";
 import { useState } from "react";
+import BlogCard from "@/components/BlogCard";
 
 const graphcms = new GraphQLClient(
-  "https://api-eu-west-2.hygraph.com/v2/clnbauc287y9001ug5dxh3qyt/master"
+  "https://api-eu-west-2.hygraph.com/v2/clnbauc287y9001ug5dxh3qyt/master",
 );
 
 const QUERY = gql`
@@ -24,12 +25,7 @@ const QUERY = gql`
         }
       }
       coverPhoto {
-        publishedAt {
-          createdBy {
-            id
-          }
-          url
-        }
+        url
       }
     }
   }
@@ -41,10 +37,11 @@ export async function getStaticProps() {
     props: {
       posts,
     },
+    revalidate: 10,
   };
 }
 
-export default function Home() {
+export default function Home({ posts }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -53,7 +50,18 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}></main>
+      <main className={styles.main}>
+        {posts.map((post) => (
+          <BlogCard
+            title={post.title}
+            author={post.author}
+            coverPhoto={post.coverPhoto}
+            key={post.id}
+            datePublished={post.datePublished}
+            slug={post.slug}
+          />
+        ))}
+      </main>
     </div>
   );
 }
