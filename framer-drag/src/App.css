@@ -1,0 +1,24 @@
+.item {
+  min-width: 10rem;
+  /* min-height: 10rem; */
+  width: 30rem;
+  padding: 40px;
+}
+
+.item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 2rem;
+  pointer-events: none;
+}
+.inner-carousel {
+  display: flex;
+}
+.carousel {
+  cursor: grab;
+  overflow-x: auto; /*when scrolling to left-right*/
+}
+p {
+  color: black;
+  text-align: center;
+}
