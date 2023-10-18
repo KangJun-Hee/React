@@ -9,14 +9,20 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState("all");
-  const [filterTodos, setFilteredTodos] = useState([]);
+  const [filteredTodos, setFilteredTodos] = useState([]);
 
   useEffect(() => {
+    console.log("todos:", todos);
+    console.log("status:", status);
+    console.log("filteredTodos:", filteredTodos);
+
     filterHandler();
   }, [todos, status]);
 
   //Functions
   const filterHandler = () => {
+    console.log("status in filterHandler:", status);
+
     switch (status) {
       case "completed":
         setFilteredTodos(todos.filter((todo) => todo.completed === true));
