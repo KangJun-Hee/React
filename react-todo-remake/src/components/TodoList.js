@@ -1,19 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 //Import Components
 import Todo from "./Todo";
 
-const TodoList = ({ todos, setTodos }) => {
-  // console.log(todos);
-  // console.log("setTodos in TodoList.js", setTodos);
-  useEffect(() => {
-    console.log("TodoList rendered");
-  });
-
+const TodoList = ({ todos, setTodos, filteredTodos }) => {
   return (
     <div className="todo-container">
       <ul className="todo-list">
-        {todos.map((todo) => (
+        {filteredTodos.map((todo) => (
           <Todo
             setTodos={setTodos}
             todos={todos}

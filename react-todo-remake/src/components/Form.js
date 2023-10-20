@@ -4,7 +4,6 @@ const Form = ({ setInputText, todos, setTodos, inputText, setStatus }) => {
   //Here I can write javascript code and function
   const inputTextHandler = (e) => {
     //e is short for events
-    // console.log(e.target.value);
     setInputText(e.target.value);
   };
   const submitTodoHandler = (e) => {
@@ -33,7 +32,7 @@ const Form = ({ setInputText, todos, setTodos, inputText, setStatus }) => {
         <select onChange={statusHandler} name="todos" className="filter-todo">
           <option value="all">All</option>
           <option value="completed">Completed</option>
-          <option value="Uncompleted">Uncompleted</option>
+          <option value="uncompleted">Uncompleted</option>
         </select>
       </div>
     </form>
